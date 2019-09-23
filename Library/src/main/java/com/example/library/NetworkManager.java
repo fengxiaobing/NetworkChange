@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.IntentFilter;
 
 import com.example.library.Utils.Constants;
+import com.example.library.listener.NetWorkObserver;
 
 //网络管理类
 public class NetworkManager {
@@ -14,6 +15,12 @@ public class NetworkManager {
 
     private NetworkManager() {
         receiver2 = new NetStateReceiver2();
+    }
+
+    public void setListener(NetWorkObserver listener) {
+        if(receiver2!=null){
+            receiver2.setListener(listener);
+        }
     }
 
     public static NetworkManager getDefault() {
@@ -35,9 +42,13 @@ public class NetworkManager {
     }
     public void init(Application application){
         this.application = application;
-        //动态广播注册
+        //动态广播注册（7.0兼容）
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.ANDROID_NET_CHANGE_ACTION);
         application.registerReceiver(receiver2,filter);
+    }
+
+    public void unRegister() {
+        application.unregisterReceiver(receiver2);
     }
 }
