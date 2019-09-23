@@ -26,6 +26,7 @@ private NetWorkObserver listener;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        //此方法不能做耗时操作 15sANR异常
         if(intent == null || intent.getAction() == null){
             //异常
             return;
